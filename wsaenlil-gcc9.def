@@ -1,0 +1,14 @@
+Bootstrap: docker
+From: ubuntu:18.04
+
+%post
+  apt-get update
+  DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+        apt-utils \
+        build-essential
+  rm -rf /var/lib/apt/lists/*
+
+%labels
+  MAINTAINER Mark Miesch
+  SPECIES JEDI
+
