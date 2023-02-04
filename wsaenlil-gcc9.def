@@ -31,16 +31,24 @@ From: ubuntu:20.04
   spack load netcdf-fortran
   spack load netcdf-cxx
   spack load cfitsio
-  env
-  env | grep ROOT
+  MPI_ROOT=$(spack find --format "{prefix}" openmpi)
+  HDF5_ROOT=$(spack find --format "{prefix}" hdf5)
+  CFITSIO_ROOT=$(spack find --format "{prefix}" cfitsio)
   echo "export PATH=\"${PATH}\"" >> $APPTAINER_ENVIRONMENT
   echo "export CPATH=\"${CPATH}\"" >> $APPTAINER_ENVIRONMENT
   echo "export LD_LIBRARY_PATH=\"${LD_LIBRARY_PATH}\"" >> $APPTAINER_ENVIRONMENT
   echo "export LIBRARY_PATH=\"${LIBRARY_PATH}\"" >> $APPTAINER_ENVIRONMENT
   echo "export PKG_CONFIG_PATH=\"${PKG_CONFIG_PATH}\"" >> $APPTAINER_ENVIRONMENT
+  echo "export MPI_ROOT=\"${MPI_ROOT}\"" >> $APPTAINER_ENVIRONMENT
+  echo "export HDF5_ROOT=\"${HDF5_ROOT}\"" >> $APPTAINER_ENVIRONMENT
+  echo "export CFITSIO_ROOT=\"${CFITSIO_ROOT}\"" >> $APPTAINER_ENVIRONMENT
   rm -rf /var/lib/apt/lists/*
 
 %labels
   MAINTAINER Mark Miesch
   SPECIES WSAENLIL
 
+%runscript
+  export NETCDF_C_ROOT="$(nc-config --prefix)"
+  export NETCDF_C_FLAGS="$(nc-config --cflags)"
+  export NETCDF_FORTRAN_ROOT="$(nf-config --prefix)"
