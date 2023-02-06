@@ -1,6 +1,10 @@
 Bootstrap: docker
 From: ubuntu:20.04
 
+%environment
+  export ENLIL_DIR=/home/mark.miesch/code/Enlil/ENLIL-2.9e-swpc
+  export ENLIL_29e_DIR=/home/mark.miesch/code/Enlil/ENLIL-2.9e-swpc
+
 %post
   apt-get update
   DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
