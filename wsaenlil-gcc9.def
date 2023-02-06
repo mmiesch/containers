@@ -12,7 +12,8 @@ From: ubuntu:20.04
         python3-dev \
         python3-pip \
         git \
-        curl
+        curl \
+        tcsh
   update-alternatives --install /usr/bin/g++ g++ $(which g++-9) 30 && \
   update-alternatives --install /usr/bin/gcc gcc $(which gcc-9) 30 && \
   update-alternatives --install /usr/bin/gfortran gfortran $(which gfortran-9) 30
@@ -34,6 +35,9 @@ From: ubuntu:20.04
   MPI_ROOT=$(spack find --format "{prefix}" openmpi)
   HDF5_ROOT=$(spack find --format "{prefix}" hdf5)
   CFITSIO_ROOT=$(spack find --format "{prefix}" cfitsio)
+  NETCDF_C_ROOT="$(nc-config --prefix)"
+  NETCDF_C_FLAGS="$(nc-config --cflags)"
+  NETCDF_FORTRAN_ROOT="$(nf-config --prefix)"
   echo "export PATH=\"${PATH}\"" >> $APPTAINER_ENVIRONMENT
   echo "export CPATH=\"${CPATH}\"" >> $APPTAINER_ENVIRONMENT
   echo "export LD_LIBRARY_PATH=\"${LD_LIBRARY_PATH}\"" >> $APPTAINER_ENVIRONMENT
@@ -42,13 +46,11 @@ From: ubuntu:20.04
   echo "export MPI_ROOT=\"${MPI_ROOT}\"" >> $APPTAINER_ENVIRONMENT
   echo "export HDF5_ROOT=\"${HDF5_ROOT}\"" >> $APPTAINER_ENVIRONMENT
   echo "export CFITSIO_ROOT=\"${CFITSIO_ROOT}\"" >> $APPTAINER_ENVIRONMENT
+  echo "export NETCDF_C_ROOT=\"${NETCDF_C_ROOT}\"" >> $APPTAINER_ENVIRONMENT
+  echo "export NETCDF_FORTRAN_ROOT=\"${NETCDF_FORTRAN_ROOT}\"" >> $APPTAINER_ENVIRONMENT
+  echo "export NETCDF_C_FLAGS=\"${NETCDF_C_FLAGS}\"" >> $APPTAINER_ENVIRONMENT
   rm -rf /var/lib/apt/lists/*
 
 %labels
   MAINTAINER Mark Miesch
   SPECIES WSAENLIL
-
-%runscript
-  export NETCDF_C_ROOT="$(nc-config --prefix)"
-  export NETCDF_C_FLAGS="$(nc-config --cflags)"
-  export NETCDF_FORTRAN_ROOT="$(nf-config --prefix)"
