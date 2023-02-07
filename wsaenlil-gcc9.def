@@ -17,6 +17,7 @@ From: ubuntu:20.04
         python3-pip \
         git \
         curl \
+        vim \
         tcsh
   update-alternatives --install /usr/bin/g++ g++ $(which g++-9) 30 && \
   update-alternatives --install /usr/bin/gcc gcc $(which gcc-9) 30 && \
@@ -29,12 +30,10 @@ From: ubuntu:20.04
   spack install hdf5 ^openmpi
   spack install netcdf-c ^openmpi ^hdf5
   spack install netcdf-fortran ^openmpi ^hdf5
-  spack install netcdf-cxx ^openmpi ^hdf5
   spack install cfitsio
   spack load openmpi
   spack load netcdf-c
   spack load netcdf-fortran
-  spack load netcdf-cxx
   spack load cfitsio
   MPI_ROOT=$(spack find --format "{prefix}" openmpi)
   HDF5_ROOT=$(spack find --format "{prefix}" hdf5)
@@ -42,7 +41,11 @@ From: ubuntu:20.04
   NETCDF_C_ROOT="$(nc-config --prefix)"
   NETCDF_C_FLAGS="$(nc-config --cflags)"
   NETCDF_FORTRAN_ROOT="$(nf-config --prefix)"
+  LD_LIBRARY_PATH=$NETCDF_C_ROOT/lib:$NETCDF_FORTRAN_ROOT/lib:$CFITSIO_ROOT/lib:$LD_LIBRARY_PATH
+  LIBRARY_PATH=$NETCDF_C_ROOT/lib:$NETCDF_FORTRAN_ROOT/lib:$CFITSIO_ROOT/lib:$LIBRARY_PATH
   echo "export PATH=\"${PATH}\"" >> $APPTAINER_ENVIRONMENT
+  echo "export LD_LIBRARY_PATH=\"${LD_LIBRARY_PATH}\"" >> $APPTAINER_ENVIRONMENT
+  echo "export LIBRARY_PATH=\"${LIBRARY_PATH}\"" >> $APPTAINER_ENVIRONMENT
   echo "export CPATH=\"${CPATH}\"" >> $APPTAINER_ENVIRONMENT
   echo "export LD_LIBRARY_PATH=\"${LD_LIBRARY_PATH}\"" >> $APPTAINER_ENVIRONMENT
   echo "export LIBRARY_PATH=\"${LIBRARY_PATH}\"" >> $APPTAINER_ENVIRONMENT
