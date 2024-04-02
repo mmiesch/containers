@@ -1,0 +1,16 @@
+Bootstrap: docker
+From: almalinux:8.9
+
+%environment
+  export EVO_PATH_ROOT=/home/mark.miesch/code/adapt-v4.0.1
+
+%post
+  yum -y install epel-release
+  yum update
+  yum -y install make gcc gcc-c++ openmpi
+  yum -y install gsl-devel cfitsio-devel libxml2-devel
+  yum -y install bzip2-devel mariadb-server mariadb-devel
+
+%labels
+  MAINTAINER Mark Miesch
+  SPECIES ADAPT
